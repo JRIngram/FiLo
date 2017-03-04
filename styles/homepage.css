@@ -1,0 +1,35 @@
+body{
+  background-color: #FFC;
+  font-family: sans-serif;
+}
+
+.forms div{
+  display: inline;
+}
+
+h1{
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
+
+main{
+  margin: auto;
+  width: 50%;
+
+}
+
+
+#sign-in{
+  display: inline;
+  margin:auto;
+  float: left;
+  width: 50%;
+}
+
+#sign-up{
+  display: inline;
+  margin:auto;
+  float: left;
+  width:50%;
+}
