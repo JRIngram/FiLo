@@ -12,6 +12,7 @@
 
       <label for="category">Category: </label>
       <select name="category" required>
+          <option value="">Please Select...</option>
           <option value="mobile">Phone</option>
           <option value="pet">Pet</option>
           <option value="jewellery">Jewellery</option>
@@ -54,13 +55,12 @@
       <br/>
 
       <label for="colour">Main Colour of Object:</label>
-      <input type="text" name="colour"/>
+      <input type="text" name="colour" required/>
       <br/>
 
       <label for="description">Description: </label>
       <br/>
-      <textarea rows="4" cols="25">
-      </textarea>
+      <textarea rows="4" cols="25"></textarea>
       <br/>
 
       <input type="submit" name="submit" value="Add Item"/>
