@@ -19,19 +19,23 @@
       }
 
       //Adds unique questions for found jewellery.
-      if(categoryValue == "jewellery"){
+      else if(categoryValue == "jewellery"){
         var jewelleryQuestions = '<label for="metalType">Metal Type:</label><input type="text" name="metalType"/><br/>';
         jewelleryQuestions += '<label for="jewelleryType">Jewellery Type: </label><input type="text" name="jewelleryType"/><br/>';
         specificQuestions.innerHTML = jewelleryQuestions;
       }
 
       //Adds unique questions for found pets.
-      if(categoryValue == "pet"){
+      else if(categoryValue == "pet"){
         var petQuestions = '<label for="pet_name">Pet Name:</label><input type="text" name="pet_name"/><br/>';
         petQuestions += '<label for="animal">Animal: </label><input type="text" name="animal"/><br/>';
         petQuestions += '<label for="breed">Breed: </label><input type="text" name="breed"/><br/>';
         petQuestions += '<label for="collar_colour">Collar Colour: </label><input type="text" name="collar_colour"/><br/>';
         specificQuestions.innerHTML = petQuestions;
+      }
+
+      else{
+        specificQuestions.innerHTML = "";
       }
     }
     </script>
