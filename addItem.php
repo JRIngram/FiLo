@@ -41,10 +41,37 @@
     </script>
   </head>
   <body>
+
+    <?php
+      session_start();
+      $success = FALSE;
+      if(isset($_POST["submitted"])){
+        try{
+          $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
+          $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
+                $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
+                $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour) VALUES(
+                  ?, ?, ?, ?, ?)');
+                $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"]));
+          }
+          $success = TRUE;
+        }
+        catch(PDOException $ex){
+          echo "An error occured!: " . $ex;
+        }
+      }
+    ?>
+
     <form action="itemList.php" method="post">
       <input type="submit" value="Back to main laddy!"/>
     </form>
     <h1>Add an item</h1>
+    <?php if($success == TRUE){
+        echo "<p>Item added successfully!</p>";
+      }
+    ?>
+
     <form id="addItemForm" action="addItem.php" method="POST">
 
       <label for="category">Category: </label>
@@ -102,7 +129,9 @@
 
       <span id="specificQuestions"></span>
 
+      <input type="hidden" name="submitted" value="true"/>
       <input type="submit" name="submit" value="Add Item"/>
     </form>
+
   </body>
 </html>
