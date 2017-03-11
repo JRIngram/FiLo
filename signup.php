@@ -35,11 +35,6 @@
         $sql = $db->prepare('INSERT INTO user(username, password, user_type, first_name, last_name, email) VALUES(
           ?, ?, ?, ?, ?, ?)');
         $sql->execute(array($username, $pass, $usertype, $firstname, $surname, $email));
-        /*
-        $exec = 'INSERT INTO user(username, password, user_type, first_name, last_name, email)
-        VALUES (
-          '$username', '$pass', '$usertype', '$firstname', '$surname', '$email')';*/
-        #$db->exec($exec);
         ?>
         <p style:"colour: green;">Thanks for signing up <?= $username?>!</p>
         <?php
