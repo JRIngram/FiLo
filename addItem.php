@@ -58,12 +58,22 @@
 
           $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
           $idQuery->execute();
-          $recentId = $idQuery->fetch();
-          $recentId = $recentId["item_id"];
+          $recentlyAddedId = $idQuery->fetch();
+          $recentlyAddedId = $recentlyAddedId["item_id"];
 
           if($_POST["category"] == "jewellery"){
             $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
-            $jewelleryQuery->execute(array($recentId, $_POST["metalType"], $_POST["jewelleryType"]));
+            $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
+          }
+
+          if($_POST["category"] == "phone"){
+            $phoneQuery = $db->prepare('INSERT INTO phone(item_id, brand, model) VALUES(?,?,?)');
+            $phoneQuery->execute(array($recentlyAddedId, $_POST["brand"], $_POST["model"]));
+          }
+
+          if($_POST["category"] == "pet"){
+            $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
+            $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
           }
           $success = TRUE;
         }
