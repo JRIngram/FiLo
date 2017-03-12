@@ -46,39 +46,43 @@
       session_start();
       $success = FALSE;
       if(isset($_POST["submitted"])){
-        try{
-          $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
-          $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
-                $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
-                $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
-                  ?, ?, ?, ?, ?, ?)');
-                $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
-          }
+        $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
+        #Validates inputs
+        if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $found_date))){
+          try{
+            $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
 
-          $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
-          $idQuery->execute();
-          $recentlyAddedId = $idQuery->fetch();
-          $recentlyAddedId = $recentlyAddedId["item_id"];
+                  $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
+                    ?, ?, ?, ?, ?, ?)');
+                  $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
+            }
 
-          if($_POST["category"] == "jewellery"){
-            $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
-            $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
-          }
+            $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
+            $idQuery->execute();
+            $recentlyAddedId = $idQuery->fetch();
+            $recentlyAddedId = $recentlyAddedId["item_id"];
 
-          if($_POST["category"] == "phone"){
-            $phoneQuery = $db->prepare('INSERT INTO phone(item_id, brand, model) VALUES(?,?,?)');
-            $phoneQuery->execute(array($recentlyAddedId, $_POST["brand"], $_POST["model"]));
-          }
+            if($_POST["category"] == "jewellery"){
+              $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
+              $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
+            }
 
-          if($_POST["category"] == "pet"){
-            $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
-            $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
+            if($_POST["category"] == "phone"){
+              $phoneQuery = $db->prepare('INSERT INTO phone(item_id, brand, model) VALUES(?,?,?)');
+              $phoneQuery->execute(array($recentlyAddedId, $_POST["brand"], $_POST["model"]));
+            }
+
+            if($_POST["category"] == "pet"){
+              $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
+              $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
+            }
+            $success = TRUE;
           }
-          $success = TRUE;
-        }
-        catch(PDOException $ex){
-          echo "An error occured!: " . $ex;
+          catch(PDOException $ex){
+            echo "An error occured!: " . $ex;
+          }
         }
       }
     ?>
@@ -87,8 +91,12 @@
       <input type="submit" value="Back to main laddy!"/>
     </form>
     <h1>Add an item</h1>
-    <?php if($success == TRUE){
+    <?php
+      if($success == TRUE){
         echo "<p>Item added successfully!</p>";
+      }
+      else if ($success == FALSE && isset($_POST["submitted"])){
+        echo "<p>Error adding item!</p>";
       }
     ?>
 
