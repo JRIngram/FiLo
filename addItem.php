@@ -48,16 +48,19 @@
       if(isset($_POST["submitted"])){
         $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
         #Validates inputs
-        if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $found_date))){
+        if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $found_date))
+          && (preg_match("/^[0-9]{1,3}$/", $_SESSION["user_id"]))
+          && (preg_match("/^([0-9a-zA-Z\- !]){1,100}$/", $_POST["found_place"]))
+          && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
+          && (preg_match("/^([a-zA-Z0-9,.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
+          && ($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet")
+        ){
           try{
             $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
-
                   $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
                     ?, ?, ?, ?, ?, ?)');
                   $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
-            }
 
             $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
             $idQuery->execute();
@@ -147,7 +150,7 @@
       <br/>
 
       <label for="colour">Main Colour of Object:</label>
-      <input type="text" name="colour" required/>
+      <input type="text" name="colour"/>
       <br/>
 
       <label for="description">Description: </label>
