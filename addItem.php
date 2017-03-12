@@ -52,8 +52,8 @@
           if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
                 $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
                 $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
-                  ?, ?, ?, ?, ?)');
-                $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"]));
+                  ?, ?, ?, ?, ?, ?)');
+                $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
           }
 
           $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
