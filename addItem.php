@@ -59,6 +59,12 @@
           try{
             #Uploads photo
             $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
+            if(!is_dir("uploads")){
+              mkdir("uploads");
+              /*FIX FOR LOCALHOST*/
+              chown("uploads", "daemon");
+              chmod("uploads", 765);
+            }
             move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $photoName);
 
             $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
