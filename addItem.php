@@ -44,6 +44,7 @@
 
     <?php
       session_start();
+
       $success = FALSE;
       if(isset($_POST["submitted"])){
         $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
@@ -56,11 +57,15 @@
           && ($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet")
         ){
           try{
+            #Uploads photo
+            $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
+            move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $photoName);
+
             $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                  $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
-                    ?, ?, ?, ?, ?, ?)');
-                  $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
+                  $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
+                    ?, ?, ?, ?, ?, ?, ?)');
+                  $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
 
             $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
             $idQuery->execute();
@@ -89,7 +94,6 @@
         }
       }
     ?>
-
     <form action="itemList.php" method="post">
       <input type="submit" value="Back to main laddy!"/>
     </form>
@@ -103,7 +107,7 @@
       }
     ?>
 
-    <form id="addItemForm" action="addItem.php" method="POST">
+    <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
 
       <label for="category">Category: </label>
       <select id="category" name="category" onchange="updateAddItemForm()" required>
@@ -158,11 +162,13 @@
       <textarea name="description" rows="4" cols="25"></textarea>
       <br/>
 
+      <label for="photo">Upload a photo:</label>
+      <input type="file" name="photo" accept="image/*" />
+      <br/>
       <span id="specificQuestions"></span>
 
       <input type="hidden" name="submitted" value="true"/>
       <input type="submit" name="submit" value="Add Item"/>
     </form>
-
   </body>
 </html>
