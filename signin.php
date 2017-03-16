@@ -12,11 +12,11 @@
       $query = $db->prepare("SELECT * FROM user WHERE username = " . $username);
       $query->execute();
       $result = $query->fetch();
-      if(sha1($pass) == $result["password"]){
+      if(hash("sha256", $_POST["password"]) == $result["password"]){
           header("Location: itemList.php");
       }
       else{
-        echo sha1($pass) . " : " . $result["password"];
+        echo hash("sha256", $_POST["password"]) . " : actual =" . $result["password"];
         echo "</br>Login failed!";
       }
 
