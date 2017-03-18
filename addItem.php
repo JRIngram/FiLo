@@ -13,10 +13,11 @@
       var categoryValue = categoryDropdown.value;
 
       //Adds unique questions for found phones.
-      if(categoryValue == "phone"){
-        var phoneQuestions = '<div class="form-group"><label for="brand">Phone brand: </label><input class="form-control" type="text" name="brand"/></div>' +
-        '<div class="form-group"><label for="model">Phone model: </label><input class="form-control" type="text" name="model"/></div>';
-        specificQuestions.innerHTML = phoneQuestions;
+      if(categoryValue == "electronic"){
+        var electronicQuestions = '<div class="form-group"><label for="electronicType">Type of Electronic: </label><input class="form-control" type="text" name="electronicType"/></div>' +
+        '<div class="form-group"><label for="brand">Brand: </label><input class="form-control" type="text" name="brand"/></div>' +
+        '<div class="form-group"><label for="model">Model: </label><input class="form-control" type="text" name="model"/></div>';
+        specificQuestions.innerHTML = electronicQuestions;
       }
 
       //Adds unique questions for found jewellery.
@@ -54,7 +55,7 @@
             && (preg_match("/^([0-9a-zA-Z\- !]){1,100}$/", $_POST["found_place"]))
             && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
             && (preg_match("/^([a-zA-Z0-9,.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
-            && ($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet")
+            && ($_POST["category"] == "jewellery" || $_POST["category"] == "electronic" || $_POST["category"] == "pet")
           ){
             try{
               #Uploads photo
@@ -83,9 +84,9 @@
                 $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
               }
 
-              if($_POST["category"] == "phone"){
-                $phoneQuery = $db->prepare('INSERT INTO phone(item_id, brand, model) VALUES(?,?,?)');
-                $phoneQuery->execute(array($recentlyAddedId, $_POST["brand"], $_POST["model"]));
+              if($_POST["category"] == "electronic"){
+                $phoneQuery = $db->prepare('INSERT INTO electronic(item_id, electronicType, brand, model) VALUES(?,?,?,?)');
+                $phoneQuery->execute(array($recentlyAddedId, $_POST["electronicType"], $_POST["brand"], $_POST["model"]));
               }
 
               if($_POST["category"] == "pet"){
@@ -118,9 +119,9 @@
             <label for="category">Category: </label>
             <select class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
                 <option value="">Please Select...</option>
-                <option value="phone">Phone</option>
-                <option value="pet">Pet</option>
+                <option value="electronic">Electronic</option>
                 <option value="jewellery">Jewellery</option>
+                <option value="pet">Pet</option>
             </select>
           </div>
           <div class="form-group">
