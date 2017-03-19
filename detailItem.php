@@ -13,8 +13,8 @@
     if(isset($_GET["submitted"])){
       $query = $db->prepare("SELECT * FROM itemRequest WHERE item_id = " . $_GET["itemId"]);
       $query->execute();
-      $addRequest = $db->prepare('INSERT INTO itemRequest(item_id, requesting_user, request_status) VALUES(?,?,?)');
-      $addRequest->execute(array($_GET["itemId"], $_SESSION["user_id"], "waiting"));
+      $addRequest = $db->prepare('INSERT INTO itemRequest(item_id, requesting_user, request_status, reason) VALUES(?,?,?,?)');
+      $addRequest->execute(array($_GET["itemId"], $_SESSION["user_id"], "waiting", $_GET["reason"]));
       $addedRequest = TRUE;
     }
 
@@ -89,9 +89,12 @@
           }
         ?>
         <p><b>Description: <br/></b><p> <?php echo $item["description"] ?></p>
-        <form method="GET" action="detailItem.php">
+        <form class="form-group" method="GET" action="detailItem.php">
           <input type="hidden" name="itemId" value="<?php echo $item["item_id"]?>" />
           <input type="hidden" name="submitted" value="true" />
+          <div class="form-group">
+            <label for="reason">Reason for item request:</label><input title="Characters must be alphabetical, numerical , . ? or !. Must be 140 characters or less." pattern="[A-Za-z0-9,.?! ]{0,140}" class="form-control" type="text" name="reason" required/>
+          </div>
           <input class="btn btn-success" type="submit" name="submit" value="Make a claim request"/>
         </form>
       </div>
