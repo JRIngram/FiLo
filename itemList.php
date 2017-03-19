@@ -20,22 +20,12 @@
   <body>
     <nav class="navbar navbar-default">
       <ul class="nav navbar-nav">
-        <li><a href="index.html">Sign-Out</a></li>
+        <li><a href="signOut.php">Sign-Out</a></li>
         <li class="active"><a href="#">View Items</a></li>
         <li><a href="addItem.php">Add Item</a></li>
-        <li class="dropdown">
-           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-           <ul class="dropdown-menu">
-             <li><a href="#">View All Items</a></li>
-             <li role="separator" class="divider"></li>
-             <li><a href="#">View Electronics</a></li>
-             <li><a href="#">View Jewellery</a></li>
-             <li><a href="#">View Pets</a></li>
-           </ul>
-         </li>
       </ul>
     </nav>
-    <div class="page-header"><h1>MAIN PAGE <small> - Please login to see more details</small></h1></div>
+    <div class="page-header"><h1>MAIN PAGE <small> - Please <a href="index.html">login</a> to see more details</small></h1></div>
       <div class="row">
         <div class="col-md-2" style="margin: auto">
           <label for="category">Select category to browse by:</label>

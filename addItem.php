@@ -103,7 +103,7 @@
       ?>
       <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
-          <li><a href="index.html">Sign-Out</a></li>
+          <li><a href="signOut.php">Sign-Out</a></li>
           <li><a href="itemList.php">View Items</a></li>
           <li class="active"><a href="addItem.php">Add Item</a></li>
       </nav>
