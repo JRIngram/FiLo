@@ -35,25 +35,43 @@
       <?php } ?>
       </h1>
     </div>
-      <div class="row">
-        <div class="col-md-2" style="margin: auto">
-          <label for="category">Select category to browse by:</label>
-          <select class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
-            <option value="">View all Items</option>
-            <option value="electronic">Electronic</option>
-            <option value="jewellery">Jewellery</option>
-            <option value="pet">Pet</option>
-          </select>
-        </div>
-      </div>
+        <?php
+        if(isset($_SESSION["username"])){
+          ?>
+          <div class="row">
+            <div class="col-md-2" style="margin: auto">
+              <label for="category">Select category to browse by:</label>
+              <select class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
+                <option value="">View all Items</option>
+                <option value="electronic">Electronic</option>
+                <option value="jewellery">Jewellery</option>
+                <option value="pet">Pet</option>
+              </select>
+            </div>
+         </div>
+        <?php
+        }
+        ?>
+
       <ul class="list-group">
       <?php
         foreach($items as $item){
           $itemObj = json_decode($item);
+          $itemId = $itemObj->{"item_id"};
       ?>
           <li class="list-group-item">
-            <p><b>Basic details for Item <?php echo $itemObj->{"item_id"} ?>: </b></p>
+            <p><b>Basic details for Item <?php echo $itemId ?>: </b></p>
             <p><?php echo $itemObj->{"found_date"} . ", " . $itemObj->{"found_place"} . ", " . $itemObj->{"category"}?>.</p>
+            <?php
+              if(isset($_SESSION["username"])){
+            ?>
+                <form method="GET" action="detailItem.php">
+                  <input type="hidden" name="itemId" value="<?php echo $itemObj->{'item_id'} ?>" />
+                  <input class="btn btn-info" type="submit" value="More Detail" name="submit"/>
+                </form>
+            <?php
+              }
+            ?>
           </li>
       <?php
         }

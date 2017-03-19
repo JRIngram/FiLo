@@ -70,9 +70,9 @@
 
               $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
               $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
+              $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
                       ?, ?, ?, ?, ?, ?, ?)');
-                    $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
+              $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
 
               $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
               $idQuery->execute();
@@ -105,7 +105,7 @@
         <ul class="nav navbar-nav">
           <li><a href="signOut.php">Sign-Out</a></li>
           <li><a href="itemList.php">View Items</a></li>
-          <li class="active"><a href="addItem.php">Add Item</a></li>
+          <li class="active"><a href="#">Add Item</a></li>
       </nav>
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
