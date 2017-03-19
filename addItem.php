@@ -110,6 +110,8 @@
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
         <?php
+        if(isset($_SESSION["username"])){
+
           if($success == TRUE){
             echo "<p>Item added successfully!</p>";
           }
@@ -187,6 +189,14 @@
           <input type="hidden" name="submitted" value="true"/>
           <input  class="btn btn-success" type="submit" name="submit" value="Add Item"/>
         </form>
+        <?php
+        }
+        else{
+        ?>
+          <h2>Please <a href="index.html">login</a> to add an item</h2>
+        <?php
+          }
+        ?>
       </div>
   </body>
 </html>
