@@ -100,10 +100,7 @@
             }
           }
         }
-      ?>
-      <a href="itemList.php"><button type="button">Back to main</button></a>
 
-      <?php
         if($success == TRUE){
           echo "<p>Item added successfully!</p>";
         }
@@ -111,6 +108,13 @@
           echo "<p>Error adding item!</p>";
         }
       ?>
+      
+      <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Sign-Out</a></li>
+          <li><a href="itemList.php">View Items</a></li>
+          <li class="active"><a href="addItem.php">Add Item</a></li>
+      </nav>
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
         <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
