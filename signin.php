@@ -21,8 +21,9 @@
       }
 
       session_start();
-      $_SESSION["username"]= $username;
+      $_SESSION["username"] = $username;
       $_SESSION["user_id"] = $result["user_id"];
+      $_SESSION["category"] =  $result["user_type"];
 
     }catch(PDOException $ex){
       echo "Error!";

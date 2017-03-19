@@ -1,9 +1,29 @@
 <!DOCTYPE html>
+
 <?php
-  $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
-  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $detailedItem = $db->query('SELECT * FROM item WHERE item_id = ' . $_GET["itemId"]);
-  $item = $detailedItem->fetch();
+  session_start();
+  $addedRequest;
+  try{
+
+    $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    #Adds item request to database
+
+    if(isset($_GET["submitted"])){
+      $query = $db->prepare("SELECT * FROM itemRequest WHERE item_id = " . $_GET["itemId"]);
+      $query->execute();
+      $addRequest = $db->prepare('INSERT INTO itemRequest(item_id, requesting_user, request_status) VALUES(?,?,?)');
+      $addRequest->execute(array($_GET["itemId"], $_SESSION["user_id"], "waiting"));
+      $addedRequest = TRUE;
+    }
+
+    $detailedItem = $db->query('SELECT * FROM item WHERE item_id = ' . $_GET["itemId"]);
+    $item = $detailedItem->fetch();
+  }
+  catch(PDOException $ex){
+    echo "An error occured: " . $ex;
+  }
 ?>
 
 <html>
@@ -21,6 +41,11 @@
     <div class="row" style="margin: auto; width: 1000px">
       <div class="col-md-6">
         <h1>Detailed View of Item <?php  echo $item["item_id"]; ?></h1>
+        <?php
+          if(isset($_GET["submitted"]) && $addedRequest == "TRUE"){
+              echo '<p>Item request sent</p>';
+          }
+        ?>
         <p><b>Category: </b> <?php echo $item["category"]; ?></p>
         <p><b>Found Date: </b> <?php echo $item["found_date"]; ?></p>
         <p><b>Found Place: </b> <?php echo $item["found_place"]; ?></p>
@@ -64,6 +89,11 @@
           }
         ?>
         <p><b>Description: <br/></b><p> <?php echo $item["description"] ?></p>
+        <form method="GET" action="detailItem.php">
+          <input type="hidden" name="itemId" value="<?php echo $item["item_id"]?>" />
+          <input type="hidden" name="submitted" value="true" />
+          <input class="btn btn-success" type="submit" name="submit" value="Make a claim request"/>
+        </form>
       </div>
       <div class="col-md-4">
         <img style="width: 400px; height: 500px" src="<?php echo "uploads/" . $item["photo"]; ?>"/>
