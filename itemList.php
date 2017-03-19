@@ -35,7 +35,30 @@
          </li>
       </ul>
     </nav>
-    <h1>MAIN PAGE</h1>
-
+    <div class="page-header"><h1>MAIN PAGE <small> - Please login to see more details</small></h1></div>
+      <div class="row">
+        <div class="col-md-2" style="margin: auto">
+          <label for="category">Select category to browse by:</label>
+          <select class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
+            <option value="">View all Items</option>
+            <option value="electronic">Electronic</option>
+            <option value="jewellery">Jewellery</option>
+            <option value="pet">Pet</option>
+          </select>
+        </div>
+      </div>
+      <ul class="list-group">
+      <?php
+        foreach($items as $item){
+          $itemObj = json_decode($item);
+      ?>
+          <li class="list-group-item">
+            <p><b>Basic details for Item <?php echo $itemObj->{"item_id"} ?>: </b></p>
+            <p><?php echo $itemObj->{"found_date"} . ", " . $itemObj->{"found_place"} . ", " . $itemObj->{"category"}?>.</p>
+          </li>
+      <?php
+        }
+      ?>
+    </ul>
   </body>
 </html>

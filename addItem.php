@@ -100,15 +100,7 @@
             }
           }
         }
-
-        if($success == TRUE){
-          echo "<p>Item added successfully!</p>";
-        }
-        else if ($success == FALSE && isset($_POST["submitted"])){
-          echo "<p>Error adding item!</p>";
-        }
       ?>
-      
       <nav class="navbar navbar-default">
         <ul class="nav navbar-nav">
           <li><a href="index.html">Sign-Out</a></li>
@@ -117,6 +109,14 @@
       </nav>
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
+        <?php
+          if($success == TRUE){
+            echo "<p>Item added successfully!</p>";
+          }
+          else if ($success == FALSE && isset($_POST["submitted"])){
+            echo "<p>Error adding item!</p>";
+          }
+        ?>
         <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
           <!--Input for category-->
           <div class="form-group">
