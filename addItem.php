@@ -110,6 +110,7 @@
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
         <?php
+        #Checks that user is indeed logged in
         if(isset($_SESSION["username"])){
 
           if($success == TRUE){
@@ -191,6 +192,8 @@
         </form>
         <?php
         }
+
+        #If user not logged in they cannot add an item.
         else{
         ?>
           <h2>Please <a href="index.html">login</a> to add an item</h2>

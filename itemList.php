@@ -25,7 +25,16 @@
         <li><a href="addItem.php">Add Item</a></li>
       </ul>
     </nav>
-    <div class="page-header"><h1>MAIN PAGE <small> - Please <a href="index.html">login</a> to see more details</small></h1></div>
+    <div class="page-header">
+      <h1>MAIN PAGE
+        <?php
+        session_start();
+          if(!isset($_SESSION["username"])){
+      ?>
+            <small> - Please <a href="index.html">login</a> to see more details</small>
+      <?php } ?>
+      </h1>
+    </div>
       <div class="row">
         <div class="col-md-2" style="margin: auto">
           <label for="category">Select category to browse by:</label>
