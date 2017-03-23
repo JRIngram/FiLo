@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <?php
+  session_start();
   $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $itemQuery = $db->query('SELECT * FROM item');
@@ -24,11 +25,28 @@
         <li class="active"><a href="#">View Items</a></li>
         <li><a href="addItem.php">Add Item</a></li>
       </ul>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <?php
+        if(isset($_SESSION["category"]) && $_SESSION["category"] == "admin"){
+      ?>
+
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="admin/users.php">Users</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="admin/requests.php">Requests</a></li>
+            </ul>
+          </li>
+        </ul>
+      <?php
+        }
+      ?>
     </nav>
     <div class="page-header">
       <h1>MAIN PAGE
         <?php
-        session_start();
           if(!isset($_SESSION["username"])){
       ?>
             <small> - Please <a href="index.html">login</a> to see more details</small>
@@ -52,7 +70,6 @@
         <?php
         }
         ?>
-
       <ul class="list-group">
       <?php
         foreach($items as $item){

@@ -3,6 +3,8 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
     <meta charset="utf-8"/>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
     /**
     * Adds specific questions for the different item categories on the open categories page
@@ -106,6 +108,23 @@
           <li><a href="signOut.php">Sign-Out</a></li>
           <li><a href="itemList.php">View Items</a></li>
           <li class="active"><a href="#">Add Item</a></li>
+          <?php
+            if(isset($_SESSION["category"]) && $_SESSION["category"] == "admin"){
+          ?>
+
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="admin/users.php">Users</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="admin/requests.php">Requests</a></li>
+                </ul>
+              </li>
+            </ul>
+          <?php
+            }
+          ?>
       </nav>
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
