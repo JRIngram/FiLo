@@ -102,30 +102,8 @@
             }
           }
         }
-      ?>
-      <nav class="navbar navbar-default">
-        <ul class="nav navbar-nav">
-          <li><a href="signOut.php">Sign-Out</a></li>
-          <li><a href="itemList.php">View Items</a></li>
-          <li class="active"><a href="#">Add Item</a></li>
-          <?php
-            if(isset($_SESSION["category"]) && $_SESSION["category"] == "admin"){
-          ?>
-
-            <ul class="nav navbar-nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="admin/users.php">Users</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="admin/requests.php">Requests</a></li>
-                </ul>
-              </li>
-            </ul>
-          <?php
-            }
-          ?>
-      </nav>
+        include('navbar.php');
+    ?>
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
         <?php

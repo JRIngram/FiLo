@@ -34,28 +34,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <ul class="nav navbar-nav">
-        <li><a href="signOut.php">Sign-Out</a></li>
-        <li><a href="itemList.php">View Items</a></li>
-        <li><a href="addItem.php">Add Item</a></li>
-        <?php
-          if(isset($_SESSION["category"]) && $_SESSION["category"] == "admin"){
-        ?>
-
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="admin/users.php">Users</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="admin/requests.php">Requests</a></li>
-              </ul>
-            </li>
-          </ul>
-        <?php
-          }
-        ?>
+    <?php include('navbar.php'); ?>
     </nav>
     <div class="row" style="margin: auto; width: 1000px">
       <div class="col-md-6">
