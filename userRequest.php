@@ -5,12 +5,18 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-
+    <?php
+      session_start();
+      include('navbar.php');
+    ?>
     <div style="width: 500px; margin: auto">
-      <h1><?= str_replace("'", "", $_SESSION["username"]) ?>'s requests</h1>
+
       <?php
         #Checks that user is indeed logged in
         if(isset($_SESSION["username"])){
+        ?>
+          <h1><?php echo str_replace("'", "", $_SESSION["username"]);?>'s requests</h1>
+        <?php
           try{
               $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
               $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -46,8 +52,9 @@
           }
           #If user not logged in they cannot add an item.
     }else{
-        echo "<h2>Please <a href='index.html'>login</a> to view this page!</h2>";
-    } ?>
+      ?>
+        <h2>Please <a href='index.html'>login</a> to view this page!</h2>;
+    <?php } ?>
   </div>
 </body>
 </html>
