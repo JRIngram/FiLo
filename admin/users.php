@@ -57,7 +57,7 @@
             <?php
               foreach($users as $user){
                 $userObj = json_decode($user);
-                $username = $userObj-Users>{"username"};
+                $username = $userObj->{"username"};
                 $userId = $userObj->{"user_id"};
                 $forename = $userObj->{"first_name"};
                 $surname = $userObj->{"last_name"};

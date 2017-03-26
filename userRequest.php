@@ -7,9 +7,9 @@
 <body>
   <nav class="navbar navbar-default">
     <ul class="nav navbar-nav">
-      <li><a href="../signOut.php">Sign-Out</a></li>
-      <li ><a href="../itemList.php">View Items</a></li>
-      <li><a href="../addItem.php">Add Item</a></li>
+      <li><a href="signOut.php">Sign-Out</a></li>
+      <li ><a href="itemList.php">View Items</a></li>
+      <li><a href="addItem.php">Add Item</a></li>
     </ul>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <?php
@@ -21,9 +21,9 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="users.php">Users</a></li>
+              <li><a href="admin/users.php">Users</a></li>
               <li role="separator" class="divider"></li>
-              <li><a href="requests.php">Requests</a></li>
+              <li><a href="admin/requests.php">Requests</a></li>
             </ul>
           </li>
         </ul>
@@ -54,26 +54,25 @@
                 $requestId = $requestObj->{"request_id"};
                 $requestStatus = $requestObj->{"request_status"};
                 $reason = $requestObj->{"reason"};
+            ?>
 
-                ?>
-                  <li class="list-group-item">
-                    <p><b>Details for Request of item #<?= $itemId ?>: </b></p>
-                    <p>Status: <?=  $requestStatus?></p>
-                    <p>Reason: <?= $reason?> </p>
-                  </li>
+            <li class="list-group-item">
+              <p><b>Details for Request of item #<?= $itemId ?>: </b></p>
+              <p>Status: <?=  $requestStatus?></p>
+              <p>Reason: <?= $reason?> </p>
+            </li>
+            <?php
               }
+            ?>
           </ul>
         <?php
           }catch(PDOException $ex){
               echo "An error has occured!: " . $ex;
           }
-
-
           #If user not logged in they cannot add an item.
     }else{
-        ?>
-        <h2>Please <a href="index.html">login</a> to view this page!</h2>
-    <?= } ?>
+        echo "<h2>Please <a href='index.html'>login</a> to view this page!</h2>";
+    } ?>
   </div>
 </body>
 </html>
