@@ -50,14 +50,14 @@
                 $userQuery = $db->query("SELECT * FROM user WHERE username != \"" . str_replace("'", "", $_SESSION["username"]) . "\"");
                 $users = array();
                 foreach ($userQuery as $user){
-                array_push($users, json_encode($user));
+                  array_push($users, json_encode($user));
               }
           ?>
           <ul class="list-group">
             <?php
               foreach($users as $user){
                 $userObj = json_decode($user);
-                $username = $userObj->{"username"};
+                $username = $userObj-Users>{"username"};
                 $userId = $userObj->{"user_id"};
                 $forename = $userObj->{"first_name"};
                 $surname = $userObj->{"last_name"};
@@ -90,7 +90,7 @@
           </ul>
           <?php
         }catch(PDOException $ex){
-          echo "An erro has occured!: " . $ex;
+          echo "An error has occured!: " . $ex;
         }
 
       }
