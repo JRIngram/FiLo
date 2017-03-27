@@ -34,12 +34,28 @@
                 $itemId = $requestObj->{"item_id"};
                 $requestStatus = $requestObj->{"request_status"};
                 $reason = $requestObj->{"reason"};
+                $requestingUser = $requestObj->{"requesting_user"};
             ?>
 
             <li class="list-group-item">
               <p><b>Details for Request of item #<?= $itemId ?>: </b></p>
               <p><b>Status:</b> <?=  $requestStatus?></p>
               <p><b>Reason:</b> <?= $reason?> </p>
+              <?php
+                if($requestStatus == "approved"){
+                  $emailQuery = $db->prepare('SELECT email FROM user WHERE user_id = ?');
+                  $emailQuery->execute(array($requestingUser));
+                  $userEmails = array();
+                  foreach($emailQuery as $email){
+                    array_push($userEmails, json_encode($email));
+                  }
+                  foreach($userEmails as $userEmail){
+                    $email = json_decode($userEmail);
+                    ?>
+                    <p><b>Your request has been approved, please contact the person who found the lost item using this email: </b><?= $email->{"email"} ?></p>
+                    <?php }
+                }
+              ?>
             </li>
             <?php
               }
@@ -52,7 +68,7 @@
           #If user not logged in they cannot add an item.
     }else{
       ?>
-        <h2>Please <a href='index.html'>login</a> to view this page!</h2>;
+        <h2>Please <a href='index.html'>login</a> to view this page!</h2>
     <?php } ?>
   </div>
 </body>

@@ -26,8 +26,8 @@
             $statusQuery = $db->prepare("UPDATE itemRequest SET request_status = ? WHERE item_id = ? AND requesting_user = ?");
             $statusQuery->execute(array($_POST["status"], $_POST["itemId"], $_POST["userId"]));
             if($_POST["status"] == "approved"){
-              $statusQuery = $db->prepare('UPDATE itemRequest SET request_status = ? WHERE requesting_user != ?');
-              $statusQuery->execute(array("declined", $_POST["userId"]));
+              $statusQuery = $db->prepare('UPDATE itemRequest SET request_status = ? WHERE item_id = ? AND requesting_user != ?');
+              $statusQuery->execute(array("declined", $_POST["itemId"], $_POST["userId"]));
             }
           }
           $requestQuery = $db->prepare('SELECT * FROM itemRequest');
