@@ -41,6 +41,7 @@
                   <option value="jewellery">Jewellery</option>
                   <option value="pet">Pet</option>
                 </select>
+                <br/>
               </div>
            </div>
           <?php

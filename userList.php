@@ -52,7 +52,7 @@
 
                 <form method="POST" action="users.php"/>
                   <label for="category"/>New user category:</label>
-                  <select class="form-control" id="category" name="category" required>
+                  <select class="form-control" name="category" required>
                     <option value="">Please select... </option>
                     <option value="registered">Normal User</option>
                     <option value="admin">Admin User</option>

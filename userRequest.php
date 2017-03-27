@@ -32,15 +32,14 @@
               foreach($requests as $request){
                 $requestObj = json_decode($request);
                 $itemId = $requestObj->{"item_id"};
-                $requestId = $requestObj->{"request_id"};
                 $requestStatus = $requestObj->{"request_status"};
                 $reason = $requestObj->{"reason"};
             ?>
 
             <li class="list-group-item">
               <p><b>Details for Request of item #<?= $itemId ?>: </b></p>
-              <p>Status: <?=  $requestStatus?></p>
-              <p>Reason: <?= $reason?> </p>
+              <p><b>Status:</b> <?=  $requestStatus?></p>
+              <p><b>Reason:</b> <?= $reason?> </p>
             </li>
             <?php
               }
