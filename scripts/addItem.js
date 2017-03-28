@@ -1,3 +1,9 @@
+window.onload = function maxDate(){
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById("found_date").setAttribute('max', today);
+  console.log(today);
+};
+
 /**
 * Adds specific questions for the different item categories on the open categories page
 */

@@ -13,9 +13,8 @@
 
         $success = FALSE;
         if(isset($_POST["submitted"])){
-          $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
           #Validates inputs
-          if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $found_date))
+          if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $_POST["date_found"]))
             && (preg_match("/^[0-9]{1,3}$/", $_SESSION["user_id"]))
             && (preg_match("/^([0-9a-zA-Z\- !]){1,100}$/", $_POST["found_place"]))
             && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
@@ -37,7 +36,7 @@
               $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
               $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
                       ?, ?, ?, ?, ?, ?, ?)');
-              $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
+              $itemQuery->execute(array($_POST["category"], $_POST["date_found"], $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
 
               $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
               $idQuery->execute();
@@ -93,39 +92,7 @@
           </div>
           <div class="form-group">
             <label for="found_date">Found Date <i>(dd/mm/yyyy)</i>: </label>
-            <input type="date" name="date"/>
-            <?php if(isset($_POST["date"])){
-              echo $_POST["date"];
-            } ?>
-            <br/>
-            <select name="day" required>
-              <?php
-                for($i = 1; $i <= 31; $i++){
-              ?>
-                  <option value="<?= $i ?>"><?= $i ?></option>
-              <?php
-                }
-              ?>
-            </select>
-            <select name="month" required>
-              <?php
-                for($i = 1; $i <= 12; $i++){
-              ?>
-                  <option value="<?= $i ?>"><?= $i ?></option>
-              <?php
-                }
-              ?>
-            </select>
-            <select name="year" required>
-              <?php
-                $currentYear = date("Y");
-                for($i = $currentYear; $i >= 1900; $i--){
-              ?>
-                  <option value="<?= $i ?>"><?= $i ?></option>
-              <?php
-                }
-              ?>
-            </select>
+            <input id="found_date" type="date" name="date_found" min="1900-01-01" />
           </div>
 
           <!--Input for found place-->
