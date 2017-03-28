@@ -5,44 +5,7 @@
     <meta charset="utf-8"/>
     <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script>
-    /**
-    * Adds specific questions for the different item categories on the open categories page
-    */
-    function updateAddItemForm(){
-      var specificQuestions = document.getElementById("specificQuestions");
-      var categoryDropdown = document.getElementById("category");
-      var categoryValue = categoryDropdown.value;
-
-      //Adds unique questions for found phones.
-      if(categoryValue == "electronic"){
-        var electronicQuestions = '<div class="form-group"><label for="electronicType">Type of Electronic: </label><input class="form-control" type="text" name="electronicType"/></div>' +
-        '<div class="form-group"><label for="brand">Brand: </label><input class="form-control" type="text" name="brand"/></div>' +
-        '<div class="form-group"><label for="model">Model: </label><input class="form-control" type="text" name="model"/></div>';
-        specificQuestions.innerHTML = electronicQuestions;
-      }
-
-      //Adds unique questions for found jewellery.
-      else if(categoryValue == "jewellery"){
-        var jewelleryQuestions = '<div class="form-group"><label for="metalType">Metal Type:</label><input class="form-control" type="text" name="metalType"/></div>' +
-        '<div class="form-group"><label for="jewelleryType">Jewellery Type: </label><input class="form-control" type="text" name="jewelleryType"/></div>';
-        specificQuestions.innerHTML = jewelleryQuestions;
-      }
-
-      //Adds unique questions for found pets.
-      else if(categoryValue == "pet"){
-        var petQuestions = '<div class="form-group"><label for="pet_name">Pet Name:</label><input class="form-control" type="text" name="pet_name"/></div>' +
-        '<div class="form-group"><label for="animal">Animal: </label><input class="form-control" type="text" name="animal"/></div>' +
-        '<div class="form-group"><label for="breed">Breed: </label><input class="form-control" type="text" name="breed"/></div>' +
-        '<div class="form-group"><label for="collar_colour">Collar Colour: </label><input class="form-control" type="text" name="collar_colour"/><br/>';
-        specificQuestions.innerHTML = petQuestions;
-      }
-
-      else{
-        specificQuestions.innerHTML = "";
-      }
-    }
-    </script>
+    <script src="scripts/addItem.js"></script>
   </head>
   <body>
       <?php
@@ -130,6 +93,10 @@
           </div>
           <div class="form-group">
             <label for="found_date">Found Date <i>(dd/mm/yyyy)</i>: </label>
+            <input type="date" name="date"/>
+            <?php if(isset($_POST["date"])){
+              echo $_POST["date"];
+            } ?>
             <br/>
             <select name="day" required>
               <?php
