@@ -26,7 +26,7 @@
               $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
               if(!is_dir("uploads")){
                 mkdir("uploads");
-                
+
                 /*FIX FOR LOCALHOST*/
                 chown("uploads", "daemon");
                 chmod("uploads", 765);
@@ -42,9 +42,14 @@
               $recentlyAddedId = $idQuery->fetch();
               $recentlyAddedId = $recentlyAddedId["item_id"];
               if($_POST["category"] == "jewellery"){
-                $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
-                $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
-                $success = TRUE;
+                if(isset($_POST["metalType"])
+                && isset($_POST["jewelleryType"])
+                && preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["metalType"])
+                && preg_match("/(necklace)|(bracelet)|(ring)|(ear-ring)|(other)/", $_POST["jewelleryType"])){
+                  $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
+                  $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
+                  $success = TRUE;
+                }
               }
               if($_POST["category"] == "electronic"){
                 if(isset($_POST["electronicType"])
