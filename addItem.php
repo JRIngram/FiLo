@@ -20,6 +20,7 @@
             && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
             && (preg_match("/^([a-zA-Z0-9,.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
             && ($_POST["category"] == "jewellery" || $_POST["category"] == "electronic" || $_POST["category"] == "pet")
+            && (isset($_FILES["photo"]))
           ){
             try{
               #Uploads photo
@@ -46,18 +47,28 @@
               if($_POST["category"] == "jewellery"){
                 $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
                 $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
+                $success = TRUE;
               }
 
               if($_POST["category"] == "electronic"){
-                $phoneQuery = $db->prepare('INSERT INTO electronic(item_id, electronicType, brand, model) VALUES(?,?,?,?)');
-                $phoneQuery->execute(array($recentlyAddedId, $_POST["electronicType"], $_POST["brand"], $_POST["model"]));
+                if(isset($_POST["electronicType"])
+                && isset($_POST["brand"])
+                && isset($_POST["model"])
+                && (preg_match("/^[a-zA-Z ]{0,60}$/", $_POST["electronicType"]))
+                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["brand"]))
+                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["model"]))){
+                  $electronicQuery = $db->prepare('INSERT INTO electronic(item_id, electronicType, brand, model) VALUES(?,?,?,?)');
+                  $electronicQuery->execute(array($recentlyAddedId, $_POST["electronicType"], $_POST["brand"], $_POST["model"]));
+                  $success = TRUE;
+                }
               }
 
               if($_POST["category"] == "pet"){
                 $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
                 $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
+                $success = TRUE;
               }
-              $success = TRUE;
+
             }
             catch(PDOException $ex){
               echo "An error occured!: " . $ex;
@@ -77,6 +88,9 @@
           }
           else if ($success == FALSE && isset($_POST["submitted"])){
             echo "<p>Error adding item!</p>";
+            if(!(preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $_POST["date_found"]))){
+              echo "Date must be written in yyyy-dd-mm format";
+            }
           }
         ?>
         <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
@@ -90,31 +104,33 @@
                 <option value="pet">Pet</option>
             </select>
           </div>
+
+          <!-- Date the item was found -->
           <div class="form-group">
             <label for="found_date">Found Date <i>(dd/mm/yyyy)</i>: </label>
-            <input id="found_date" type="date" name="date_found" min="1900-01-01" />
+            <input id="found_date" type="date" name="date_found" min="1900-01-01" pattern="^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$" title="Please enter a valid date" required="true"/>
           </div>
 
           <!--Input for found place-->
           <div class="form-group">
             <label for="found_place">Found Place <i>(City)</i>:</label>
-            <input class="form-control" type="text" name="found_place" required/>
+            <input class="form-control" type="text" name="found_place" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true"/>
           </div>
 
           <!--Input for main colour of object-->
           <div class="form-group">
             <label for="colour">Main Colour of Object:</label>
-            <input class="form-control" type="text" name="colour"/>
+            <input class="form-control" type="text" name="colour" pattern="^[a-zA-Z ]{0,20}$" title="Please enter only alphabetical characters and spaces. Colour must be less than 20 characters." required="true"/>
           </div>
 
           <div class="form-group">
             <label for="description">Description: </label>
             </br>
-            <textarea class="form-control" name="description" rows="2" cols="25"></textarea>
+            <input class="form-control" name="description" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true" />
           </div>
 
           <label for="photo">Upload a photo:</label>
-          <input type="file" name="photo" accept="image/*" />
+          <input type="file" name="photo" accept="image/*" pattern="^([0-9a-zA-Z\(\)]){1,73}$" required="true" required="true"/>
           <p class="help-block">Should be of type gif, png or jpeg</p>
           <span id="specificQuestions"></span>
 
