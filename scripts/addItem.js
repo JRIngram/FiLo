@@ -38,10 +38,10 @@ function updateAddItemForm(){
 
   //Adds unique questions for found pets.
   else if(categoryValue == "pet"){
-    var petQuestions = '<div class="form-group"><label for="pet_name">Pet Name:</label><input class="form-control" type="text" name="pet_name" required="true"/></div>' +
-    '<div class="form-group"><label for="animal">Animal: </label><input class="form-control" type="text" name="animal" required="true"/></div>' +
-    '<div class="form-group"><label for="breed">Breed: </label><input class="form-control" type="text" name="breed" required="true"/></div>' +
-    '<div class="form-group"><label for="collar_colour">Collar Colour: </label><input class="form-control" type="text" name="collar_colour" required="true"/><br/>';
+    var petQuestions = '<div class="form-group"><label for="pet_name">Pet Name:</label><input class="form-control" type="text" name="pet_name" pattern="^[a-zA-Z ]{0,30}$" title="Must contain alphaberical characters and spaces only. Must be 30 characters or less." required="true"/></div>' +
+    '<div class="form-group"><label for="animal">Animal: </label><input class="form-control" type="text" name="animal" pattern="^[a-zA-Z ]{0,30}$" title="Must contain alphaberical characters and spaces only. Must be 30 characters or less." required="true"/></div>' +
+    '<div class="form-group"><label for="breed">Breed: </label><input class="form-control" type="text" name="breed" pattern="^[a-zA-Z ]{0,20}$" title="Must contain alphaberical characters and spaces only. Must be 20 characters or less." required="true"/></div>' +
+    '<div class="form-group"><label for="collar_colour">Collar Colour: </label><input class="form-control" type="text" name="collar_colour" pattern="^[a-zA-Z ]{0,40}$" title="Must contain alphaberical characters and spaces only. Must be 40 characters or less." required="true"/><br/>';
     specificQuestions.innerHTML = petQuestions;
   }
 
