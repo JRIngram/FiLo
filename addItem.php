@@ -26,6 +26,7 @@
               $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
               if(!is_dir("uploads")){
                 mkdir("uploads");
+                
                 /*FIX FOR LOCALHOST*/
                 chown("uploads", "daemon");
                 chmod("uploads", 765);

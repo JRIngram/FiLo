@@ -22,8 +22,17 @@ function updateAddItemForm(){
 
   //Adds unique questions for found jewellery.
   else if(categoryValue == "jewellery"){
-    var jewelleryQuestions = '<div class="form-group"><label for="metalType">Metal Type:</label><input class="form-control" type="text" name="metalType" required="true"/></div>' +
-    '<div class="form-group"><label for="jewelleryType">Jewellery Type: </label><input class="form-control" type="text" name="jewelleryType" required="true"/></div>';
+    var jewelleryQuestions = '<div class="form-group"><label for="metalType">Metal Type:</label><input class="form-control" type="text" name="metalType" pattern="^[a-zA-Z ]{0,20}$" title="Use only alphabtical characters and must be less than 20 characters in length" required="true"/></div>' +
+    '<div class="form-group"><label for="jewelleryType">Jewellery Type: </label>' +
+        '<select class="form-control" name="jewelleryType" required="true">' +
+          '<option value="">Please Select...</option>' +
+          '<option value="necklace">Necklace</option>' +
+          '<option value="bracelet">Bracelet</option>' +
+          '<option value="ring">Ring</option>' +
+          '<option value="ear-ring">Ear Ring</option>' +
+          '<option value="other">Other</option>'
+        '</select>'
+    '</div>';
     specificQuestions.innerHTML = jewelleryQuestions;
   }
 
