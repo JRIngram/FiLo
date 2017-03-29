@@ -28,7 +28,7 @@
         $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $username = strtolower($_POST["username"]);
-        $pass = sha1($_POST["password"]);
+        $pass = hash("sha256", $_POST["password"]);
         $email = $_POST["email"];
         $firstname = $_POST["firstName"];
         $surname = $_POST["surname"];

@@ -1,143 +1,143 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script>
-    /**
-    * Adds specific questions for the different item categories on the open categories page
-    */
-    function updateAddItemForm(){
-      var specificQuestions = document.getElementById("specificQuestions");
-      var categoryDropdown = document.getElementById("category");
-      var categoryValue = categoryDropdown.value;
-
-      //Adds unique questions for found phones.
-      if(categoryValue == "phone"){
-        var phoneQuestions = '<label for="brand">Phone brand: </label><input type="text" name="brand"/><br/>';
-        phoneQuestions += '<label for="model">Phone model: </label><input type="text" name="model"/><br/>';
-        specificQuestions.innerHTML = phoneQuestions;
-      }
-
-      //Adds unique questions for found jewellery.
-      else if(categoryValue == "jewellery"){
-        var jewelleryQuestions = '<label for="metalType">Metal Type:</label><input type="text" name="metalType"/><br/>';
-        jewelleryQuestions += '<label for="jewelleryType">Jewellery Type: </label><input type="text" name="jewelleryType"/><br/>';
-        specificQuestions.innerHTML = jewelleryQuestions;
-      }
-
-      //Adds unique questions for found pets.
-      else if(categoryValue == "pet"){
-        var petQuestions = '<label for="pet_name">Pet Name:</label><input type="text" name="pet_name"/><br/>';
-        petQuestions += '<label for="animal">Animal: </label><input type="text" name="animal"/><br/>';
-        petQuestions += '<label for="breed">Breed: </label><input type="text" name="breed"/><br/>';
-        petQuestions += '<label for="collar_colour">Collar Colour: </label><input type="text" name="collar_colour"/><br/>';
-        specificQuestions.innerHTML = petQuestions;
-      }
-
-      else{
-        specificQuestions.innerHTML = "";
-      }
-    }
-    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+    <meta charset="utf-8"/>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="scripts/addItem.js"></script>
   </head>
   <body>
-
-    <?php
-      session_start();
-      $success = FALSE;
-      if(isset($_POST["submitted"])){
-        try{
-          $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
-          $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          if($_POST["category"] == "jewellery" || $_POST["category"] == "phone" || $_POST["category"] == "pet"){
-                $found_date = $_POST["year"] . "-" . $_POST["month"] . "-" . $_POST["day"];
-                $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, description) VALUES(
-                  ?, ?, ?, ?, ?, ?)');
-                $itemQuery->execute(array($_POST["category"], $found_date, $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $_POST["description"]));
+      <?php
+        session_start();
+        $success = FALSE;
+        if(isset($_POST["submitted"])){
+          #Validates inputs
+          if((preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $_POST["date_found"]))
+            && (preg_match("/^[0-9]{1,3}$/", $_SESSION["user_id"]))
+            && (preg_match("/^([0-9a-zA-Z\- !]){1,100}$/", $_POST["found_place"]))
+            && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
+            && (preg_match("/^([a-zA-Z0-9,.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
+            && ($_POST["category"] == "jewellery" || $_POST["category"] == "electronic" || $_POST["category"] == "pet")
+            && (isset($_FILES["photo"]))
+          ){
+            try{
+              #Uploads photo
+              $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
+              if(!is_dir("uploads")){
+                mkdir("uploads");
+                /*FIX FOR LOCALHOST*/
+                chown("uploads", "daemon");
+                chmod("uploads", 765);
+              }
+              move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $photoName);
+              $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
+              $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
+                      ?, ?, ?, ?, ?, ?, ?)');
+              $itemQuery->execute(array($_POST["category"], $_POST["date_found"], $_SESSION["user_id"], $_POST["found_place"], $_POST["colour"], $photoName, $_POST["description"]));
+              $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user = ' . $_SESSION["user_id"]);
+              $idQuery->execute();
+              $recentlyAddedId = $idQuery->fetch();
+              $recentlyAddedId = $recentlyAddedId["item_id"];
+              if($_POST["category"] == "jewellery"){
+                $jewelleryQuery = $db->prepare('INSERT INTO jewellery(item_id, metal, jewellery_type) VALUES(?,?,?)');
+                $jewelleryQuery->execute(array($recentlyAddedId, $_POST["metalType"], $_POST["jewelleryType"]));
+                $success = TRUE;
+              }
+              if($_POST["category"] == "electronic"){
+                if(isset($_POST["electronicType"])
+                && isset($_POST["brand"])
+                && isset($_POST["model"])
+                && (preg_match("/^[a-zA-Z ]{0,60}$/", $_POST["electronicType"]))
+                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["brand"]))
+                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["model"]))){
+                  $electronicQuery = $db->prepare('INSERT INTO electronic(item_id, electronicType, brand, model) VALUES(?,?,?,?)');
+                  $electronicQuery->execute(array($recentlyAddedId, $_POST["electronicType"], $_POST["brand"], $_POST["model"]));
+                  $success = TRUE;
+                }
+              }
+              if($_POST["category"] == "pet"){
+                $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
+                $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
+                $success = TRUE;
+              }
+            }
+            catch(PDOException $ex){
+              echo "An error occured!: " . $ex;
+            }
           }
-          $idQuery = $db->prepare('SELECT MAX(item_id) AS item_id, found_user FROM item WHERE found_user  = ' . $_SESSION["user_id"]);
-          $idQuery->execute();
-          $recentId = $idQuery->fetch();
-          $recentId = $recentId["found_user"];
-          echo $recentId;
-          $success = TRUE;
-
         }
-        catch(PDOException $ex){
-          echo "An error occured!: " . $ex;
+        include('navbar.php');
+    ?>
+      <div style="width: 500px; margin: auto">
+        <h1>Add an item</h1>
+        <?php
+        #Checks that user is indeed logged in
+        if(isset($_SESSION["username"])){
+          if($success == TRUE){
+            echo "<p>Item added successfully!</p>";
+          }
+          else if ($success == FALSE && isset($_POST["submitted"])){
+            echo "<p>Error adding item!</p>";
+            if(!(preg_match("/^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$/", $_POST["date_found"]))){
+              echo "Date must be written in yyyy-dd-mm format";
+            }
+          }
+        ?>
+        <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
+          <!--Input for category-->
+          <div class="form-group">
+            <label for="category">Category: </label>
+            <select class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
+                <option value="">Please Select...</option>
+                <option value="electronic">Electronic</option>
+                <option value="jewellery">Jewellery</option>
+                <option value="pet">Pet</option>
+            </select>
+          </div>
+
+          <!-- Date the item was found -->
+          <div class="form-group">
+            <label for="found_date">Found Date <i>(dd/mm/yyyy)</i>: </label>
+            <input id="found_date" type="date" name="date_found" min="1900-01-01" pattern="^[0-9]{4}\-[0-1]*[0-9]\-[0-3]*[0-9]$" title="Please enter a valid date" required="true"/>
+          </div>
+
+          <!--Input for found place-->
+          <div class="form-group">
+            <label for="found_place">Found Place <i>(City)</i>:</label>
+            <input class="form-control" type="text" name="found_place" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true"/>
+          </div>
+
+          <!--Input for main colour of object-->
+          <div class="form-group">
+            <label for="colour">Main Colour of Object:</label>
+            <input class="form-control" type="text" name="colour" pattern="^[a-zA-Z ]{0,20}$" title="Please enter only alphabetical characters and spaces. Colour must be less than 20 characters." required="true"/>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description: </label>
+            </br>
+            <input class="form-control" name="description" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true" />
+          </div>
+
+          <label for="photo">Upload a photo:</label>
+          <input type="file" name="photo" accept="image/*" pattern="^([0-9a-zA-Z\(\)]){1,73}$" required="true" required="true"/>
+          <p class="help-block">Should be of type gif, png or jpeg</p>
+          <span id="specificQuestions"></span>
+
+          <input type="hidden" name="submitted" value="true"/>
+          <input  class="btn btn-success" type="submit" name="submit" value="Add Item"/>
+        </form>
+        <?php
         }
-      }
-    ?>
-
-    <form action="itemList.php" method="post">
-      <input type="submit" value="Back to main laddy!"/>
-    </form>
-    <h1>Add an item</h1>
-    <?php if($success == TRUE){
-        echo "<p>Item added successfully!</p>";
-      }
-    ?>
-
-    <form id="addItemForm" action="addItem.php" method="POST">
-
-      <label for="category">Category: </label>
-      <select id="category" name="category" onchange="updateAddItemForm()" required>
-          <option value="">Please Select...</option>
-          <option value="phone">Phone</option>
-          <option value="pet">Pet</option>
-          <option value="jewellery">Jewellery</option>
-      </select>
-      <br/>
-
-      <label for="found_date">Found Date <i>(dd/mm/yyyy)</i>: </label>
-      <select name="day" required>
-        <?php
-          for($i = 1; $i <= 31; $i++){
+        #If user not logged in they cannot add an item.
+        else{
         ?>
-            <option value="<?= $i ?>"><?= $i ?></option>
+          <h2>Please <a href="index.html">login</a> to add an item</h2>
         <?php
           }
         ?>
-      </select>
-      <select name="month" required>
-        <?php
-          for($i = 1; $i <= 12; $i++){
-        ?>
-            <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
-          }
-        ?>
-      </select>
-      <select name="year" required>
-        <?php
-          $currentYear = date("Y");
-          for($i = $currentYear; $i >= 1900; $i--){
-        ?>
-            <option value="<?= $i ?>"><?= $i ?></option>
-        <?php
-          }
-        ?>
-      </select>
-      <br/>
-
-      <label for="found_place">Found Place <i>(City)</i>:</label>
-      <input type="text" name="found_place" required/>
-      <br/>
-
-      <label for="colour">Main Colour of Object:</label>
-      <input type="text" name="colour" required/>
-      <br/>
-
-      <label for="description">Description: </label>
-      <br/>
-      <textarea name="description" rows="4" cols="25"></textarea>
-      <br/>
-
-      <span id="specificQuestions"></span>
-
-      <input type="hidden" name="submitted" value="true"/>
-      <input type="submit" name="submit" value="Add Item"/>
-    </form>
-
+      </div>
   </body>
 </html>
