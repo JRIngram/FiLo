@@ -55,18 +55,27 @@
                 if(isset($_POST["electronicType"])
                 && isset($_POST["brand"])
                 && isset($_POST["model"])
-                && (preg_match("/^[a-zA-Z ]{0,60}$/", $_POST["electronicType"]))
-                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["brand"]))
-                && (preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["model"]))){
+                && preg_match("/^[a-zA-Z ]{0,60}$/", $_POST["electronicType"])
+                && preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["brand"])
+                && preg_match("/^[a-zA-Z0-9 ]{0,20}$/", $_POST["model"])){
                   $electronicQuery = $db->prepare('INSERT INTO electronic(item_id, electronicType, brand, model) VALUES(?,?,?,?)');
                   $electronicQuery->execute(array($recentlyAddedId, $_POST["electronicType"], $_POST["brand"], $_POST["model"]));
                   $success = TRUE;
                 }
               }
               if($_POST["category"] == "pet"){
-                $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
-                $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
-                $success = TRUE;
+                if(isset($_POST["pet_name"])
+                && isset($_POST["animal"])
+                && isset($_POST["breed"])
+                && isset($_POST["collar_colour"])
+                && preg_match("/^[a-zA-Z ]{0,30}$/", $_POST["pet_name"])
+                && preg_match("/^[a-zA-Z ]{0,40}$/", $_POST["animal"])
+                && preg_match("/^[a-zA-Z ]{0,30}$/", $_POST["breed"])
+                && preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["collar_colour"])){
+                  $petQuery = $db->prepare('INSERT INTO pet(item_id, pet_name, breed, collar_colour, animal) VALUES (?,?,?,?,?)');
+                  $petQuery->execute(array($recentlyAddedId, $_POST["pet_name"], $_POST["breed"], $_POST["collar_colour"], $_POST["animal"]));
+                  $success = TRUE;
+                }
               }
             }
             catch(PDOException $ex){
