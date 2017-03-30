@@ -1,23 +1,23 @@
 <?php
     $error = "";
     if(!preg_match("/^([a-zA-Z1-9\-_]){1,30}$/", $_POST["username"])){
-      $error = $error . "<p>A username containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 30 characters</p>";
+      $error = $error . "<p  style='color: red;' >A username containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 30 characters</p>";
     }
 
     if(!preg_match("/^([a-zA-Z1-9-_]){6,256}$/", $_POST["password"])){
-      $error = $error . "<p>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 256 characters; Min length is 6!</p>";
+      $error = $error . "<p  style='color: red;'>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 256 characters; Min length is 6!</p>";
     }
 
     if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
-      $error .= "<p>Your e-mail is not valid!</p>";
+      $error .= "<p  style='color: red;'>Your e-mail is not valid!</p>";
     }
 
     if(!preg_match("/^([a-zA-Z]){1,30}$/", $_POST["firstName"])){
-      $error = $error . "<p>Your first name is required! Max length is 30.</p>";
+      $error = $error . "<p  style='color: red;'>Your first name is required! Max length is 30.</p>";
     }
 
     if(!preg_match("/^([a-zA-Z]){1,30}$/", $_POST["surname"])){
-      $error = $error . "<p>Your surname is required! Max length is 30.</p>";
+      $error = $error . "<p  style='color: red;'>Your surname is required! Max length is 30.</p>";
     }
 
 
@@ -44,49 +44,7 @@
             }
     }
     else{
-      ?>
-      <!DOCTYPE>
-      <html>
-        <head>
-          <title>FIFO</title>
-          <link rel="icon" href="images/FILOBaseLogo.png"></link>
-          <link rel="stylesheet" type="text/css" href="styles/homepage.css"></link>
-        </head>
-        <body>
-
-          <h1>FILo | <i>Find The Lost</i></h1>
-
-          <div id="logo">
-            <img src="images/FILOBaseLogo.png"/>
-          </div>
-
-          <main class="forms">
-
-            <div id="sign-up" style="display:inline;">
-              <h2>Sign-Up Today!</h2>
-              <p> <?= $error ?></p>
-              <form action="signup.php" method="post">
-                <p>Username: <input type="text" name="username" required/></p>
-                <p>Password: <input type="password" name="password" required/></p>
-                <p>E-mail: <input type="text" name="email" required/></p>
-                <p>First Name: <input type="text" name="firstName" required/></p>
-                <p>Surname: <input type="text" name="surname" required/></p>
-                <input type="submit" value="Sign Up!"/>
-              </form>
-            </div>
-
-            <div id="sign-in" style="display:inline">
-              <h2>Sign-In</h2>
-              <form action="signin.php" method="post">
-                <p>Username: <input type="text" name="username"/></p>
-                <p>Password: <input type="password" name="password"/></p>
-                <input type="submit" value="Sign In!"/>
-              </form>
-            </div>
-          </main>
-
-        </body>
-      </html>
-<?php
+      echo "<p style='color: red;'>" . $error . "</p>";
+      include("index.html");
     }
 ?>
