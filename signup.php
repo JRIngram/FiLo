@@ -1,22 +1,22 @@
 <?php
     $error = "";
-    if(!preg_match("/^([a-zA-Z1-9-_]){1,30}$/", $_POST["username"])){
+    if(!preg_match("/^([a-zA-Z1-9\-_]){1,30}$/", $_POST["username"])){
       $error = $error . "<p>A username containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 30 characters</p>";
     }
 
-    if(!preg_match("/^([a-zA-Z1-9-_]){1,64}$/", $_POST["password"])){
-      $error = $error . "<p>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 64 characters!</p>";
+    if(!preg_match("/^([a-zA-Z1-9-_]){6,256}$/", $_POST["password"])){
+      $error = $error . "<p>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 256 characters; Min length is 6!</p>";
     }
 
     if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
       $error .= "<p>Your e-mail is not valid!</p>";
     }
 
-    if(!preg_match("/^([a-zA-Z1-9]){1,30}$/", $_POST["firstName"])){
+    if(!preg_match("/^([a-zA-Z]){1,30}$/", $_POST["firstName"])){
       $error = $error . "<p>Your first name is required! Max length is 30.</p>";
     }
 
-    if(!preg_match("/^([a-zA-Z1-9 ]){1,30}$/", $_POST["surname"])){
+    if(!preg_match("/^([a-zA-Z]){1,30}$/", $_POST["surname"])){
       $error = $error . "<p>Your surname is required! Max length is 30.</p>";
     }
 
