@@ -36,8 +36,8 @@ function samePasswordCheck(){
       document.getElementById("passwordMatch").innerHTML = "<p style='color:red;'>Passwords do not match!</p>";
       document.getElementById("signUpButton").disabled = true;
   }
-  
-  if(document.forms["signup"]["password"].value == document.forms["signup"]["reenterPassword"].value){
+
+  else if(document.forms["signup"]["password"].value == document.forms["signup"]["reenterPassword"].value){
     document.getElementById("passwordMatch").innerHTML = "";
     document.getElementById("signUpButton").disabled = false;
   }
