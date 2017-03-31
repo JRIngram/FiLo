@@ -16,8 +16,8 @@
           header("Location: itemList.php");
       }
       else{
-        echo hash("sha256", $_POST["password"]) . " : actual =" . $result["password"];
-        echo "</br>Login failed!";
+        echo "<p style='color: red;'>Username and password do not match!</p>";
+        include("index.html");
       }
 
       session_start();

@@ -5,7 +5,7 @@
     }
 
     if(!preg_match("/^([a-zA-Z1-9-_]){6,256}$/", $_POST["password"])){
-      $error = $error . "<p  style='color: red;'>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 256 characters; Min length is 6!</p>";
+      $error = $error . "<p style='color: red;'>A password containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 256 characters; Min length is 6!</p>";
     }
 
     if(!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
@@ -36,12 +36,14 @@
           ?, ?, ?, ?, ?, ?)');
         $sql->execute(array($username, $pass, $usertype, $firstname, $surname, $email));
         ?>
-        <p style:"colour: green;">Thanks for signing up <?= $username?>!</p>
-        <?php
-            }catch(PDOException $ex){
-              echo "An error occurred!";
-              echo $ex;
-            }
+        <div class="row" style="width:500px; margin:auto;"><p style="color: green;">Thanks for signing up <?= $username?>!</p></div>
+      <?php
+        include("index.html");
+        }catch(PDOException $ex){
+          ?><div class="row" style="margin:auto;width:500px;"><p style="color: red;">Error signing up! The email or username may already be taken!</p></div>
+      <?php
+          include("index.html");
+        }
     }
     else{
       echo "<p style='color: red;'>" . $error . "</p>";
