@@ -4,20 +4,27 @@
   session_start();
   $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  if(!isset($_GET["category"]) || $_GET["category"] == "all"){
-    $itemQuery = $db->query('SELECT * FROM item');
+
+  if($_GET["searchType"] == "date" && (isset($_GET["firstDate"]) && isset($_GET["secondDate"]))){
+    echo "WOO!";
+    $itemQuery = $db->prepare('SELECT * FROM item WHERE found_date BETWEEN ? AND ?');
+    $itemQuery->execute(array($_GET["firstDate"], $_GET["secondDate"]));
   }
 
-  else if($_GET["category"] == "electronic"){
+  else if(isset($_GET["category"]) && $_GET["category"] == "electronic"){
     $itemQuery = $db->query('SELECT * FROM item WHERE category = "electronic"');
   }
 
-  else if($_GET["category"] == "jewellery"){
+  else if(isset($_GET["category"]) && $_GET["category"] == "jewellery"){
     $itemQuery = $db->query('SELECT * FROM item WHERE category = "jewellery"');
   }
 
-  else if($_GET["category"] == "pet"){
+  else if(isset($_GET["category"]) && $_GET["category"] == "pet"){
     $itemQuery = $db->query('SELECT * FROM item WHERE category = "pet"');
+  }
+
+  else{
+    $itemQuery = $db->query('SELECT * FROM item');
   }
 
   $items = array();
@@ -35,7 +42,7 @@
   </head>
   <body>
     <?php include('navbar.php'); ?>
-    <div style="width: 500px; margin: auto" class="page-header">
+    <div style="width: 750px; margin: auto" class="page-header">
       <h1>Item List
         <?php
           if(!isset($_SESSION["username"])){
@@ -49,49 +56,70 @@
             ?>
             <div class="row">
               <div>
-                <form name="searchItemCategory" method="GET" action="itemList.php">
-                  <label for="category">Select category to browse by:</label>
-                  <select style="display: inline;margin: auto; width: 70%; " class="form-control" id="category" name="category" onchange="updateAddItemForm()" required>
-                    <?php
-                    if(!isset($_GET["category"]) || $_GET["category"] == "all"){
-                    ?>
-                      <option selected="true" value="all">View all Items</option>
-                      <option value="electronic">Electronic</option>
-                      <option value="jewellery">Jewellery</option>
-                      <option value="pet">Pet</option>
-                    <?php
-                    }
-
-                    else if($_GET["category"] == "electronic"){
-                      ?>
-                        <option value="all">View all Items</option>
-                        <option selected="true"  value="electronic">Electronic</option>
-                        <option value="jewellery">Jewellery</option>
-                        <option value="pet">Pet</option>
-                      <?php
-                    }
-
-                    else if($_GET["category"] == "jewellery"){
-                      ?>
-                        <option value="all">View all Items</option>
-                        <option value="electronic">Electronic</option>
-                        <option selected="true" value="jewellery">Jewellery</option>
-                        <option value="pet">Pet</option>
-                      <?php
-                    }
-
-                    else if($_GET["category"] == "pet"){
-                      ?>
-                        <option value="all">View all Items</option>
-                        <option value="electronic">Electronic</option>
-                        <option value="jewellery">Jewellery</option>
-                        <option selected="true" value="pet">Pet</option>
-                      <?php
-                    }
-                    ?>
-                  </select>
-                  <input style="display: inline;width: 25%;" class="btn btn-info" type="submit" value="Search!" name="categorySearch"/>
+                <form name="searchType" method="GET" action="itemList.php">
+                  <label for="searchType">Search by:</label>
                   <br/>
+                  <select style="display: inline;margin: auto; width: 50%;" class="form-control" id="searchType" name="searchType">
+                    <option value="category">Category</option>
+                    <option value="date">Date</option>
+                  </select>
+                  <input class="btn btn-info" type="submit" action="itemList.php" value="Change Search Type"/>
+                </form>
+                <form name="search" method="GET" action="itemList.php">
+                  <?php if(isset($_GET["searchType"]) && $_GET["searchType"] == "category"){ ?>
+                    <label for="category">Select category to browse by:</label>
+                    </br>
+                    <select style="display: inline;margin: auto; width: 50%; " class="form-control" id="category" name="category" required>
+                      <?php
+                      if(!isset($_GET["category"]) || $_GET["category"] == "all"){
+                      ?>
+                        <option selected="true" value="all">View all Items</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="jewellery">Jewellery</option>
+                        <option value="pet">Pet</option>
+                      <?php
+                      }
+
+                      else if($_GET["category"] == "electronic"){
+                        ?>
+                          <option value="all">View all Items</option>
+                          <option selected="true"  value="electronic">Electronic</option>
+                          <option value="jewellery">Jewellery</option>
+                          <option value="pet">Pet</option>
+                        <?php
+                      }
+
+                      else if($_GET["category"] == "jewellery"){
+                        ?>
+                          <option value="all">View all Items</option>
+                          <option value="electronic">Electronic</option>
+                          <option selected="true" value="jewellery">Jewellery</option>
+                          <option value="pet">Pet</option>
+                        <?php
+                      }
+
+                      else if($_GET["category"] == "pet"){
+                        ?>
+                          <option value="all">View all Items</option>
+                          <option value="electronic">Electronic</option>
+                          <option value="jewellery">Jewellery</option>
+                          <option selected="true" value="pet">Pet</option>
+                        <?php
+                      }
+                      ?>
+                    </select>
+                    <input style="display: inline;width: 25%;" class="btn btn-info" type="submit" value="Search!"/>
+                  <?php
+                    }
+                  ?>
+                  <?php if(isset($_GET["searchType"]) && $_GET["searchType"] == "date"){ ?>
+                    <label for="firstDate">Search for items found between:</label>
+                    <input type="date" name="firstDate"></input>
+                    <label for="secondDate">And: </label>
+                    <input type="date" name="secondDate"></input>
+                    <input type="hidden" name="searchType" value="date"/>
+                    <input style="display: inline;width: 25%;" class="btn btn-info" type="submit" value="Search!"/>
+                  <?php } ?>
                 </form>
               </div>
            </div>
