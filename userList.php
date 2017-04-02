@@ -53,7 +53,7 @@
                   echo "<p><b>Category: </b>" . $category . "</p>";
                 ?>
                 <!--Admin can change the category of user, from registered to admin-->
-                <form method="POST" action="users.php"/>
+                <form method="POST" action="userList.php"/>
                   <label for="category"/>New user category:</label>
                   <select class="form-control" name="category" required>
                     <option value="">Please select... </option>

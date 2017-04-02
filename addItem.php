@@ -19,13 +19,13 @@
             && (preg_match("/^[0-9]{1,3}$/", $_SESSION["user_id"]))
             && (preg_match("/^([0-9a-zA-Z\- !]){1,100}$/", $_POST["found_place"]))
             && (preg_match("/^[a-zA-Z ]{0,20}$/", $_POST["colour"]))
-            && (preg_match("/^([a-zA-Z0-9,.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
+            && (preg_match("/^([a-zA-Z0-9,\.!?\-\"'\\ ]){0,100}$/", $_POST["description"]))
             && ($_POST["category"] == "jewellery" || $_POST["category"] == "electronic" || $_POST["category"] == "pet")
             && (isset($_FILES["photo"]))
           ){
             try{
               #Uploads photo
-              $photoName = date('Y-m-d') . "_" . date('h:i:s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
+              $photoName = date('Y-m-d') . "_" . date('h-i-s') . "_" . $_SESSION["user_id"] . "_" . $_FILES["photo"]["name"];
               if(!is_dir("uploads")){
                 mkdir("uploads");
 
@@ -111,7 +111,7 @@
             }
           }
         ?>
-        
+
         <!--Form for adding items -->
         <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
           <!--Input for category-->
@@ -147,7 +147,7 @@
           <div class="form-group">
             <label for="description">Description: </label>
             </br>
-            <input class="form-control" name="description" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true" />
+            <input class="form-control" name="description" pattern="^([0-9a-zA-Z\.,\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true" />
           </div>
 
           <!-- Asks user to upload image -->
