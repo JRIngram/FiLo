@@ -5,11 +5,11 @@
   $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  if($_GET["searchType"] == "date" && (isset($_GET["firstDate"]) && isset($_GET["secondDate"]))){
-    echo "WOO!";
+  if(((isset($_GET["searchType"]) && $_GET["searchType"]) == "date") && (isset($_GET["firstDate"]) && isset($_GET["secondDate"]))){
     $itemQuery = $db->prepare('SELECT * FROM item WHERE found_date BETWEEN ? AND ?');
     $itemQuery->execute(array($_GET["firstDate"], $_GET["secondDate"]));
   }
+
 
   else if(isset($_GET["category"]) && $_GET["category"] == "electronic"){
     $itemQuery = $db->query('SELECT * FROM item WHERE category = "electronic"');
