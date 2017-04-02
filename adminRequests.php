@@ -89,6 +89,6 @@
       }else{
     ?>
         <h2>Please <a href='index.html'>login</a> as an admin view this page!</h2>
-  <?php} ?>
+  <?php } ?>
 </body>
 </html>
