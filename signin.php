@@ -5,6 +5,7 @@
   }
   else{
     try{
+      #Checks the username and password is correct
       $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
       $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $username = $db->quote($_POST["username"]);

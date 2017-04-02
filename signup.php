@@ -1,4 +1,5 @@
 <?php
+    #Checks that the inputted user values on the sign-in form are exceptable
     $error = "";
     if(!preg_match("/^([a-zA-Z1-9\-_]){1,30}$/", $_POST["username"])){
       $error = $error . "<p  style='color: red;' >A username containing only the characters 'a-z', 'A-Z', '0-9', '-' and '_' is required! Max length is 30 characters</p>";
@@ -21,7 +22,7 @@
     }
 
 
-
+    #If inputted values are exceptable, enter them into the database.
     if($error == ""){
       $usertype = "registered";
       try{
@@ -38,10 +39,13 @@
         ?>
         <div class="row" style="width:500px; margin:auto;"><p style="color: green;">Thanks for signing up <?= $username?>!</p></div>
       <?php
+        #Return user to homepage, so they need to sign-in again
         include("index.html");
-        }catch(PDOException $ex){
-          ?><div class="row" style="margin:auto;width:500px;"><p style="color: red;">Error signing up! The email or username may already be taken!</p></div>
+      }catch(PDOException $ex){
+      ?>
+        <div class="row" style="margin:auto;width:500px;"><p style="color: red;">Error signing up! The email or username may already be taken!</p></div>
       <?php
+          #Return user to homepage, informing them of the error
           include("index.html");
         }
     }
