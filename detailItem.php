@@ -9,7 +9,6 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     #Adds item request to database
-
     if(isset($_GET["submitted"])){
       $query = $db->prepare("SELECT * FROM itemRequest WHERE item_id = " . $_GET["itemId"]);
       $query->execute();
@@ -28,6 +27,8 @@
 
 <html>
   <head>
+        <title>FIFO</title>
+        <link rel="icon" href="images/FILOBaseLogo.png"></link>
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
@@ -49,37 +50,37 @@
         <p><b>Found Place: </b> <?php echo $item["found_place"]; ?></p>
         <p><b>Main Colour: </b> <?php echo $item["colour"]; ?></p>
         <?php
-          #Creates specific questions.
-          if($item["category"] == "pet"){
-            #Add Pet questions
+        #Displays specific details
+        if($item["category"] == "pet"){
+            #Add Pet details
             $petDetails = $db->query('SELECT * FROM pet WHERE item_id = ' . $item["item_id"]);
             $pet = $petDetails->fetch();
         ?>
-        <p><b>Animal: </b> <?php echo $pet["animal"]?></p>
-        <p><b>Pet Name: </b> <?php echo $pet["pet_name"] ?></p>
-        <p><b>Breed: </b> <?php echo $pet["breed"] ?></p>
-        <p><b>Collar Colour: </b> <?php echo $pet["collar_colour"]?></p>
+          <p><b>Animal: </b> <?php echo $pet["animal"]?></p>
+          <p><b>Pet Name: </b> <?php echo $pet["pet_name"] ?></p>
+          <p><b>Breed: </b> <?php echo $pet["breed"] ?></p>
+          <p><b>Collar Colour: </b> <?php echo $pet["collar_colour"]?></p>
 
         <?php
           }
           elseif($item["category"] == "electronic"){
-            #Add electronic questions
+            #Add electronic details
             $electronicDetails = $db->query('SELECT * FROM electronic WHERE item_id = ' . $item["item_id"]);
             $electronic = $electronicDetails->fetch();
         ?>
-        <p><b>Electronic Type: </b> <?php echo $electronic["electronicType"] ?></p>
-        <p><b>Brand: </b> <?php echo $electronic["brand"] ?></p>
-        <p><b>Model: </b> <?php echo $electronic["model"] ?></p>
+            <p><b>Electronic Type: </b> <?php echo $electronic["electronicType"] ?></p>
+            <p><b>Brand: </b> <?php echo $electronic["brand"] ?></p>
+            <p><b>Model: </b> <?php echo $electronic["model"] ?></p>
 
         <?php
           }
           elseif($item["category"] == "jewellery"){
-            #Add jewellery questions
+            #Add jewellery details
             $jewelleryDetails = $db->query('SELECT * FROM jewellery WHERE item_id = ' . $item["item_id"]);
             $jewellery = $jewelleryDetails->fetch();
         ?>
-        <p><b>Metal: </b><?php echo $jewellery["metal"] ?></p>
-        <p><b>Jewellery Type: </b><?php echo $jewellery["jewellery_type"] ?></p>
+            <p><b>Metal: </b><?php echo $jewellery["metal"] ?></p>
+            <p><b>Jewellery Type: </b><?php echo $jewellery["jewellery_type"] ?></p>
         <?php
           }
           else{
@@ -87,6 +88,7 @@
           }
         ?>
         <p><b>Description: <br/></b><p> <?php echo $item["description"] ?></p>
+        <!-- Allows user to request items and give a reason" -->
         <form class="form-group" method="GET" action="detailItem.php">
           <input type="hidden" name="itemId" value="<?php echo $item["item_id"]?>" />
           <input type="hidden" name="submitted" value="true" />

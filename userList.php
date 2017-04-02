@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <title>FIFO</title>
+        <link rel="icon" href="images/FILOBaseLogo.png"></link>
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
@@ -14,8 +16,8 @@
       <div style="width: 500px; margin: auto">
         <h1>Users</h1>
         <?php
-          #Checks that user is indeed logged in
 
+          #Checks that user is indeed logged in
           if(isset($_SESSION["category"]) && $_SESSION["category"] == "admin"){
             try{
                 $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
@@ -31,6 +33,7 @@
                   array_push($users, json_encode($user));
               }
           ?>
+          <!--Displays the list of all users-->
           <ul class="list-group">
             <?php
               foreach($users as $user){
@@ -49,7 +52,7 @@
                   echo "<p><b>Email: </b>" . $email . "</p>";
                   echo "<p><b>Category: </b>" . $category . "</p>";
                 ?>
-
+                <!--Admin can change the category of user, from registered to admin-->
                 <form method="POST" action="users.php"/>
                   <label for="category"/>New user category:</label>
                   <select class="form-control" name="category" required>

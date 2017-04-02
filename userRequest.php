@@ -1,4 +1,6 @@
 <head>
+      <title>FIFO</title>
+      <link rel="icon" href="images/FILOBaseLogo.png"></link>
       <meta charset="utf-8"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
       <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
@@ -27,6 +29,7 @@
                 array_push($requests, json_encode($request));
               }
         ?>
+          <!--Displays the list of requests the current user has made-->
           <ul class="list-group">
             <?php
               foreach($requests as $request){
@@ -49,6 +52,7 @@
                   foreach($emailQuery as $email){
                     array_push($userEmails, json_encode($email));
                   }
+                  #If request has been accepted the user gets the item finder's email so they can contact them-->
                   foreach($userEmails as $userEmail){
                     $email = json_decode($userEmail);
                     ?>

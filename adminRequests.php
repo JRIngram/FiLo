@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+      <title>FIFO</title>
+      <link rel="icon" href="images/FILOBaseLogo.png"></link>
       <meta charset="utf-8"/>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
       <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
@@ -10,16 +12,17 @@
   <?php
     session_start();
     include('navbar.php');
-
   ?>
   <div style="width: 500px; margin: auto">
     <h1>Confirm/Decline Requests</h1>
     <?php
+
       #Checks that user is indeed logged in
       if(isset($_SESSION["username"]) && $_SESSION["category"] == "admin"){
       ?>
         <ul class="list-group">
         <?php
+          #Updates the status of an item request if the form as been submitted
           $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
           $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           if(isset($_POST["status"])){
@@ -30,6 +33,7 @@
               $statusQuery->execute(array("declined", $_POST["itemId"], $_POST["userId"]));
             }
           }
+          #Retrieves all item requests from the DB.
           $requestQuery = $db->prepare('SELECT * FROM itemRequest');
           $requestQuery->execute();
           $requests = array();
@@ -39,6 +43,7 @@
         ?>
         <ul class="list-group">
         <?php
+          #Displays all item requests from the DB.
           foreach($requests as $request){
             $requestObj = json_decode($request);
             $itemId = $requestObj->{"item_id"};
@@ -62,6 +67,7 @@
               <p><b>Requester Username:</b> <?= $user->{"username"} ?></p>
               <p><b>Requester E-mail:</b> <?= $user->{"email"} ?></p>
               <p><b>Requester Name:</b> <?= $user->{"first_name"}?> <?= $user->{"last_name"} ?></p>
+              <!-- Allows an admin to accept/decline requests -->
               <form method="POST" action="adminRequests.php">
                   <input type="hidden" name="itemId" value="<?= $itemId ?>"/>
                   <input type="hidden" name="userId" value="<?= $user->{"user_id"} ?>"/>
@@ -82,7 +88,7 @@
     <?php
       }else{
     ?>
-      <h2>Please <a href='index.html'>login</a> as an admin view this page!</h2>
-  <?php } ?>
+        <h2>Please <a href='index.html'>login</a> as an admin view this page!</h2>
+  <?php} ?>
 </body>
 </html>

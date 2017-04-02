@@ -1,7 +1,6 @@
 window.onload = function maxDate(){
   var today = new Date().toISOString().split('T')[0];
   document.getElementById("found_date").setAttribute('max', today);
-  console.log("UPDATE!");
 };
 
 /**
@@ -44,7 +43,7 @@ function updateAddItemForm(){
     '<div class="form-group"><label for="collar_colour">Collar Colour: </label><input class="form-control" type="text" name="collar_colour" pattern="^[a-zA-Z ]{0,20}$" title="Must contain alphaberical characters and spaces only. Must be 20 characters or less." required="true"/><br/>';
     specificQuestions.innerHTML = petQuestions;
   }
-
+  
   else{
     specificQuestions.innerHTML = "";
   }

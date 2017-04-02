@@ -144,6 +144,7 @@
           ?>
         <ul class="list-group">
           <?php
+          
             #Decodes the JSON object and displays the items.
             foreach($items as $item){
               $itemObj = json_decode($item);

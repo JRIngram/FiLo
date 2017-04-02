@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>FIFO</title>
+    <link rel="icon" href="images/FILOBaseLogo.png"></link>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
     <meta charset="utf-8"/>
     <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
@@ -27,11 +29,12 @@
               if(!is_dir("uploads")){
                 mkdir("uploads");
 
-                /*FIX FOR LOCALHOST*/
                 chown("uploads", "daemon");
                 chmod("uploads", 765);
               }
               move_uploaded_file($_FILES["photo"]["tmp_name"], "uploads/" . $photoName);
+
+              #Uploads item to DB
               $db = new PDO("mysql:dbname=fifo;host=localhost", "root", "");
               $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
               $itemQuery = $db->prepare('INSERT INTO item(category, found_date, found_user, found_place, colour, photo, description) VALUES(
@@ -41,6 +44,8 @@
               $idQuery->execute();
               $recentlyAddedId = $idQuery->fetch();
               $recentlyAddedId = $recentlyAddedId["item_id"];
+
+              #Validates inputs for jewellery items
               if($_POST["category"] == "jewellery"){
                 if(isset($_POST["metalType"])
                 && isset($_POST["jewelleryType"])
@@ -51,6 +56,8 @@
                   $success = TRUE;
                 }
               }
+
+              #Validates inputs for electronic items
               if($_POST["category"] == "electronic"){
                 if(isset($_POST["electronicType"])
                 && isset($_POST["brand"])
@@ -63,6 +70,8 @@
                   $success = TRUE;
                 }
               }
+
+              #Validates inputs for pet items
               if($_POST["category"] == "pet"){
                 if(isset($_POST["pet_name"])
                 && isset($_POST["animal"])
@@ -78,6 +87,7 @@
                 }
               }
             }
+
             catch(PDOException $ex){
               echo "An error occured!: " . $ex;
             }
@@ -88,6 +98,7 @@
       <div style="width: 500px; margin: auto">
         <h1>Add an item</h1>
         <?php
+
         #Checks that user is indeed logged in
         if(isset($_SESSION["username"])){
           if($success == TRUE){
@@ -100,6 +111,8 @@
             }
           }
         ?>
+        
+        <!--Form for adding items -->
         <form id="addItemForm" action="addItem.php" method="POST" enctype="multipart/form-data">
           <!--Input for category-->
           <div class="form-group">
@@ -130,22 +143,26 @@
             <input class="form-control" type="text" name="colour" pattern="^[a-zA-Z ]{0,20}$" title="Please enter only alphabetical characters and spaces. Colour must be less than 20 characters." required="true"/>
           </div>
 
+          <!--Description of the object-->
           <div class="form-group">
             <label for="description">Description: </label>
             </br>
             <input class="form-control" name="description" pattern="^([0-9a-zA-Z\- !]){1,100}$" title="Please enter a place containing only alphanumerical characters, \ - spaces and !. It must be less than 100 characters in length." required="true" />
           </div>
 
+          <!-- Asks user to upload image -->
           <label for="photo">Upload a photo:</label>
           <input type="file" name="photo" accept="image/*" pattern="^([0-9a-zA-Z\(\)]){1,73}$" required="true" required="true"/>
           <p class="help-block">Should be of type gif, png or jpeg</p>
           <span id="specificQuestions"></span>
 
+          <!--Allows server to check that the form has been submitted-->
           <input type="hidden" name="submitted" value="true"/>
           <input  class="btn btn-success" type="submit" name="submit" value="Add Item"/>
         </form>
         <?php
         }
+
         #If user not logged in they cannot add an item.
         else{
         ?>
