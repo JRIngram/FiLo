@@ -1,3 +1,4 @@
+<!-- Displays the navbar for the website -->
 <nav class="navbar navbar-default">
   <a class="navbar-brand" href="#">FiLo <span class="glyphicon glyphicon-search"></span></a>
   <ul class="nav navbar-nav">
@@ -23,4 +24,4 @@
     <?php
     }
     ?>
-  </nav>
+</nav>
